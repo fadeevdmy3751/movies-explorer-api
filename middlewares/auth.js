@@ -1,9 +1,11 @@
 require('dotenv').config();
 
+const { NODE_ENV, JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/UnauthorizedError');
+const { JwtKey } = require('../utils/config');
 
-// eslint-disable-next-line consistent-return
+// esl int-dis able-next-line consistent-return
 module.exports = (req, res, next) => {
   const token = req.cookies.jwt;
   if (!token) {
@@ -11,13 +13,12 @@ module.exports = (req, res, next) => {
   }
 
   let payload;
-  const { NODE_ENV, JWT_SECRET } = process.env;
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : JwtKey);
   } catch (err) {
     next(new UnauthorizedError('неверный токен'));
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
-  next(); // пропускаем запрос дальше
+  return next(); // пропускаем запрос дальше
 };

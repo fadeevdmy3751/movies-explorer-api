@@ -9,7 +9,7 @@ const DEFAULT_ERROR = 500;
 class MovieApiError extends Error {
   constructor(message) {
     super(message);
-    this.message = `Movie error: ${this.message}`;
+    this.message = `MovieApi error: ${this.message}`;
   }
 }
 

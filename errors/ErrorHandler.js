@@ -1,14 +1,12 @@
-require('dotenv').config();
+// require('dotenv').config();
 
-const { NODE_ENV } = process.env;
-// eslint-disable-next-line no-unused-vars
+// const { NODE_ENV } = process.env;
 const ErrorHandler = (err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500
   const { statusCode = 500, message } = err;
-  if (NODE_ENV !== 'production' && statusCode === 500) {
-    // eslint-disable-next-line no-console
-    console.log(message);
-  }
+  // if (NODE_ENV !== 'production' && statusCode === 500) {
+  //   console.log(message);
+  // }
   res.status(statusCode)
     .send({
       // проверяем статус и выставляем сообщение в зависимости от него
@@ -16,6 +14,7 @@ const ErrorHandler = (err, req, res, next) => {
         ? 'На сервере произошла ошибка'
         : message,
     });
+  next();
 };
 
 module.exports = ErrorHandler;

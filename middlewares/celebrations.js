@@ -23,21 +23,17 @@ const validateCredentials = celebrate({
 
 const validateMovie = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
+    movieId: Joi.number().required(),
     country: Joi.string().required(),
     director: Joi.string().required(),
-    duration: Joi.string().required(),
+    duration: Joi.number().required(), // еще посмотреть тип данных
     year: Joi.number().required(),
     description: Joi.string().required(),
     image: Joi.string().required().uri({ domain: { minDomainSegments: 2 } }),
     trailerLink: Joi.string().required().uri({ domain: { minDomainSegments: 2 } }),
     thumbnail: Joi.string().required().uri({ domain: { minDomainSegments: 2 } }),
-    owner: Joi.string().required().alphanum().length(24)
-      .hex(),
-    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-
   }),
 });
 

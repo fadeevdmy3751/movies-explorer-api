@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const helmet = require('helmet');
 const { errors } = require('celebrate');
+const { limiter, DBUrl } = require('./utils/config');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const mainRouter = require('./routes/index');
 const ErrorHandler = require('./errors/ErrorHandler');
@@ -11,8 +13,9 @@ const ErrorHandler = require('./errors/ErrorHandler');
 const app = express();
 const { PORT = 3100 } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/moviedb');
+mongoose.connect(DBUrl);
 
+app.use(limiter);
 app.use(cors({
   // todo актуализировать
   origin: ['http://localhost:3100', 'http://localho.st:3100', 'http://fdmitrij.nomoredomains.icu', 'https://fdmitrij.nomoredomains.icu'],
@@ -21,6 +24,7 @@ app.use(cors({
 
 app.use(bodyParser.json()); // для собирания JSON-формата
 app.use(cookieParser()); // парсер кук
+app.use(helmet());
 app.use(requestLogger); // логгер запросов
 
 app.use('/', mainRouter);
@@ -34,8 +38,8 @@ app.listen(
   () => {
     // Если всё работает, консоль покажет, какой порт приложение слушает
     // запрещено линтером, поэтому
-    /* eslint-disable no-console */
-    console.log(`App listening on port ${PORT}`);
-    /* eslint-enable no-console */
+    /* esl int-dis able no-console */
+    // console.log(`App listening on port ${PORT}`);
+    /* esl int-ena ble no-console */
   },
 );

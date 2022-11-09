@@ -25,7 +25,9 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// eslint-disable-next-line func-names
+// e slint-dis able-next-line func-names
+// неясно как именно убрать предупреждение (не ошибка)
+// линтера в данном случае, т.к. функция использует this
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
