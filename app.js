@@ -27,7 +27,7 @@ app.use(cookieParser()); // парсер кук
 app.use(helmet());
 app.use(requestLogger); // логгер запросов
 
-app.use('/', mainRouter);
+app.use('/api/', mainRouter);
 
 app.use(errorLogger); // подключаем логгер ошибок
 app.use(errors()); // обработчик ошибок celebrate
