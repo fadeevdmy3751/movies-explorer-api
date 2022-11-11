@@ -3,6 +3,7 @@ const DefaultError = require('../errors/DefaultError');
 const NotFoundError = require('../errors/NotFoundError');
 const IncorrectDataError = require('../errors/IncorrectDataError');
 const ConflictError = require('../errors/ConflictError');
+const ForbiddenError = require('../errors/ForbiddenError');
 
 function getMovies(req, res, next) {
   movieModel.find({ owner: req.user._id }, null, { sort: { _id: -1 } })
@@ -11,20 +12,38 @@ function getMovies(req, res, next) {
 }
 
 function deleteMovie(req, res, next) {
-  movieModel.findOne({ movieId: req.params.movieId, owner: req.user._id })
+  movieModel.findById(req.params.movieId)
+    .orFail(new NotFoundError('фильм'))
     .then((movie) => {
-      if (!movie) next(new NotFoundError('фильм'));
-      else {
-        movieModel.findByIdAndDelete(movie._id)
-          .then(() => res.send({ message: 'фильм удалён из избранного' }))
-          .catch(next);
+      if (movie.owner.toString() !== req.user._id) {
+        throw new ForbiddenError('чужой фильм');
       }
+      movie.delete()
+        .then(() => res.send({ message: 'фильм удалён из избранного' }))
+        .catch(next);
     })
     .catch((err) => {
       if (err.name === 'CastError') next(new IncorrectDataError('ID фильма'));
       else next(err);
     });
 }
+
+// old way
+// function deleteMovie(req, res, next) {
+//   movieModel.findOne({ movieId: req.params.movieId, owner: req.user._id })
+//     .then((movie) => {
+//       if (!movie) next(new NotFoundError('фильм'));
+//       else {
+//         movieModel.findByIdAndDelete(movie._id)
+//           .then(() => res.send({ message: 'фильм удалён из избранного' }))
+//           .catch(next);
+//       }
+//     })
+//     .catch((err) => {
+//       if (err.name === 'CastError') next(new IncorrectDataError('ID фильма'));
+//       else next(err);
+//     });
+// }
 
 function createMovie(req, res, next) {
   const { body } = req;

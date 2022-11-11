@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const { errors } = require('celebrate');
 const { limiter, DBUrl } = require('./utils/config');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const mainRouter = require('./routes/index');
+const mainRouter = require('./routes');
 const ErrorHandler = require('./errors/ErrorHandler');
 
 const app = express();
@@ -15,6 +15,7 @@ const { PORT = 3100 } = process.env;
 
 mongoose.connect(DBUrl);
 
+app.use(requestLogger); // логгер запросов
 app.use(limiter);
 app.use(cors({
   // todo актуализировать
@@ -25,7 +26,6 @@ app.use(cors({
 app.use(bodyParser.json()); // для собирания JSON-формата
 app.use(cookieParser()); // парсер кук
 app.use(helmet());
-app.use(requestLogger); // логгер запросов
 
 // путь /api/ согласно странному пункту чеклиста в разделе Хорошие практики:
 // API приложения располагается на домене вида: name.zone/api, а не просто name.zone.

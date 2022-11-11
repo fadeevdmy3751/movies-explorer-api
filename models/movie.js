@@ -5,7 +5,7 @@ const movieSchema = new mongoose.Schema({
   country: { type: String, required: true },
   director: { type: String, required: true },
   duration: { type: Number, required: true },
-  year: { type: Number, required: true },
+  year: { type: String, required: true },
   description: { type: String, required: true },
   image: {
     type: String,
@@ -27,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     ref: 'user',
   },
-  movieId: { type: Number, required: true },
+  movieId: { type: String, required: true },
   nameRU: { type: String, required: true },
   nameEN: { type: String, required: true },
   // всего 12 полей

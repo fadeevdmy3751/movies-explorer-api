@@ -3,7 +3,7 @@ require('dotenv').config();
 const { NODE_ENV, JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-const { JwtKey } = require('../utils/config');
+const { DevJwtKey } = require('../utils/config');
 
 // esl int-dis able-next-line consistent-return
 module.exports = (req, res, next) => {
@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
 
   let payload;
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : JwtKey);
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : DevJwtKey);
   } catch (err) {
     next(new UnauthorizedError('неверный токен'));
   }
