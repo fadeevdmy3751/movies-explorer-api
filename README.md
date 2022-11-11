@@ -6,7 +6,7 @@
 
 Сайт запущен на виртуальном сервере в Яндекс.Облаке
 
-IP 51.250.98.115
+IP 62.84.121.123
 
 Backend https://api.fadeeploma.nomoredomains.icu/api 
 

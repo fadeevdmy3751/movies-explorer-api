@@ -7,7 +7,6 @@ const IncorrectDataError = require('../errors/IncorrectDataError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
 const { DevJwtKey } = require('../utils/config');
-const UnauthorizedError = require("../errors/UnauthorizedError");
 
 function getMe(req, res, next) {
   userModel.findOne({ _id: req.user._id })
@@ -21,22 +20,23 @@ function getMe(req, res, next) {
       next(new DefaultError('Произошла ошибка при получении пользователя'));
     });
 }
+
 function updateProfile(req, res, next) {
   const { name = null, email = null } = req.body;
-  userModel.find({movieId:{$ne:"8"},email:email}).
-    .then(user => {
-      if(user) return Promise.reject(new ConflictError('пользователь с такой почтой уже существует'));
-      userModel.findByIdAndUpdate
-//todo HEREERERERE
-    })
-  })
-  // userModel.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
-  //   .then((user) => res.send(user))
-  //   .catch((err) => {
-  //     if (err.name === 'ValidationError') next(new IncorrectDataError('профиль'));
-  //     else next(new DefaultError('Произошла ошибка при обновлении профиля'));
-  //   });
+  userModel.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+    .orFail(() => next(new NotFoundError('пользователь')))
+    .then((user) => res.send(user))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new IncorrectDataError('профиль'));
+      } else if (err.code === 11000) {
+        next(new ConflictError('пользователь с такой почтой уже существует'));
+      } else {
+        next(err);
+      }
+    });
 }
+
 function createUser(req, res, next) {
   const { name, email, password } = req.body;
   bcrypt.hash(password, 10)
