@@ -27,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     ref: 'user',
   },
-  movieId: { type: String, required: true },
+  movieId: { type: mongoose.Schema.Types.ObjectId, required: true },
   nameRU: { type: String, required: true },
   nameEN: { type: String, required: true },
   // всего 12 полей
