@@ -54,7 +54,8 @@ function createMovie(req, res, next) {
         return;
       } // already liked
       movieModel.create({ ...body, owner: req.user._id })
-        .then((newMovie) => res.send({ message: `фильм ${newMovie._id} добавлен` }))
+      // .then((newMovie) => res.send({ message: `фильм ${newMovie._id} добавлен` }))
+        .then((newMovie) => res.send({ message: `фильм ${newMovie.movieId} добавлен` }))
         .catch((err) => {
           if (err.name === 'ValidationError') {
             next(new IncorrectDataError(`параметры фильма: ${Object.keys(err.errors).join()}`));
