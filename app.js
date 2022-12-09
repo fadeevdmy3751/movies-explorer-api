@@ -11,7 +11,7 @@ const mainRouter = require('./routes');
 const ErrorHandler = require('./errors/ErrorHandler');
 
 const app = express();
-const { PORT = 3100 } = process.env;
+const { PORT = 3010 } = process.env;
 
 mongoose.connect(DBUrl);
 
@@ -42,7 +42,7 @@ app.listen(
     // Если всё работает, консоль покажет, какой порт приложение слушает
     // запрещено линтером, поэтому
     /* esl int-dis able no-console */
-    // console.log(`App listening on port ${PORT}`);
+    console.log(`App listening on port ${PORT}`);
     /* esl int-ena ble no-console */
   },
 );
