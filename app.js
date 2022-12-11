@@ -19,7 +19,7 @@ app.use(requestLogger); // логгер запросов
 app.use(limiter);
 app.use(cors({
   // todo актуализировать
-  origin: ['http://localhost:3100', 'http://localho.st:3100', 'http://fdmitrij.nomoredomains.icu', 'https://fdmitrij.nomoredomains.icu'],
+  origin: ['https://fadeeploma.nomoredomains.club', 'http://localhost:3100', 'http://localho.st:3100'],
   credentials: true,
 }));
 
